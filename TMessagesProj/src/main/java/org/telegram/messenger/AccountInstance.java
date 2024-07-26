@@ -66,6 +66,10 @@ public class AccountInstance {
         return UserConfig.getInstance(currentAccount);
     }
 
+    public UserWalletConfig getUserWalletConfig() {
+        return UserWalletConfig.getInstance(currentAccount);
+    }
+
     public DownloadController getDownloadController() {
         return DownloadController.getInstance(currentAccount);
     }
