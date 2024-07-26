@@ -52,6 +52,7 @@ import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.UserWalletConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.LaunchActivity;
@@ -837,6 +838,10 @@ public abstract class BaseFragment {
 
     public UserConfig getUserConfig() {
         return getAccountInstance().getUserConfig();
+    }
+
+    public UserWalletConfig getUserWalletConfig() {
+        return getAccountInstance().getUserWalletConfig();
     }
 
     public void setFragmentPanTranslationOffset(int offset) {

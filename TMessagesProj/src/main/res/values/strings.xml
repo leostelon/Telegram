@@ -7131,6 +7131,7 @@
     <string name="ProfileArchivedStories">Archived Posts</string>
     <string name="ReactionSent">Reaction sent.</string>
     <string name="MyProfile">My Profile</string>
+    <string name="Wallet">Wallet</string>
     <string name="ProfileMyStoriesTab">Saved</string>
     <string name="ProfileMyStoriesCount_zero">%d saved stories</string>
     <string name="ProfileMyStoriesCount_one">%d saved story</string>
