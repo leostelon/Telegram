@@ -5,6 +5,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.telegram.messenger.PlutoAuthTokensHelper;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
@@ -13,6 +15,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class User {
+    private static PlutoAuthTokensHelper.Token token;
     static class CreateWalletRequestType {
         private String telegramId;
     }
@@ -40,7 +43,11 @@ public class User {
             public void onResponse(@NonNull Call<CreateWalletResponseType> call, @NonNull Response<CreateWalletResponseType> response) {
                 if(response.isSuccessful()) {
                     CreateWalletResponseType res = response.body();
-                    if(res != null) Log.d("Wallet Response", res.toString());
+                    if(res != null) {
+                        token = new PlutoAuthTokensHelper.Token(res.refreshToken, res.accessToken);
+                        PlutoAuthTokensHelper.saveLogInToken(token);
+                        Log.d("Wallet Response", res.toString());
+                    };
                 } else {
                     Log.d("Wallet Failed", String.valueOf(response.code()));
                 }

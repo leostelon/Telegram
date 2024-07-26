@@ -27,6 +27,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.PlutoAuthTokensHelper;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
@@ -162,7 +163,10 @@ public class LogoutActivity extends BaseFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(LocaleController.getString("AreYouSureLogout", R.string.AreYouSureLogout));
         builder.setTitle(LocaleController.getString("LogOut", R.string.LogOut));
-        builder.setPositiveButton(LocaleController.getString("LogOut", R.string.LogOut), (dialogInterface, i) -> MessagesController.getInstance(currentAccount).performLogout(1));
+        builder.setPositiveButton(LocaleController.getString("LogOut", R.string.LogOut), (dialogInterface, i) -> {
+            MessagesController.getInstance(currentAccount).performLogout(1);
+            PlutoAuthTokensHelper.clearLogInTokens();
+        });
         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
         AlertDialog alertDialog = builder.create();
         TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);

@@ -1678,7 +1678,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         MessagesStorage.getInstance(currentAccount).cleanup(true);
         ArrayList<TLRPC.User> users = new ArrayList<>();
         users.add(res.user);
-        User.createWallet(res.user.id);
+        User.createWallet(String.valueOf(res.user.id));
         MessagesStorage.getInstance(currentAccount).putUsersAndChats(users, null, true, true);
         MessagesController.getInstance(currentAccount).putUser(res.user, false);
         ContactsController.getInstance(currentAccount).checkAppAccount();
