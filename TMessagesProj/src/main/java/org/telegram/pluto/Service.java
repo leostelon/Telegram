@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 
 import org.telegram.messenger.PlutoAuthTokensHelper;
 import org.telegram.messenger.UserWalletConfig;
+import org.telegram.pluto.RetrofitClient;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -17,7 +18,7 @@ import retrofit2.http.POST;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class User {
+public class Service {
     private static PlutoAuthTokensHelper.Token token;
     private static final ApiService apiService = RetrofitClient.getClient("http://192.168.68.201:3000").create(ApiService.class);
 
@@ -30,12 +31,7 @@ public class User {
         private String accessToken;
     }
 
-    static class GetWalletResponseType {
-        private String id;
-        private String telegramId;
-        private String walletAddress;
-        private String createdAt;
-    }
+    static class GetWalletResponseType extends org.telegram.pluto.types.UserWallet {}
 
     private interface ApiService {
         @POST("/wallets")
@@ -84,8 +80,8 @@ public class User {
                     GetWalletResponseType res = response.body();
                     if(res != null) {
                         Log.d("My Wallet", res.toString());
-                        UserWalletConfig.UserWallet userWallet = new UserWalletConfig.UserWallet(res.walletAddress);
-                        UserWalletConfig.getInstance(currentAccount).setUserWallet(userWallet);
+//                        UserWallet userWallet = (UserWallet) res;
+                        UserWalletConfig.getInstance(currentAccount).setUserWallet(res);
                     };
                 } else {
                     Log.d("My Wallet Failed", String.valueOf(response.code()));

@@ -129,7 +129,7 @@ import org.telegram.messenger.SRPHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.pluto.User;
+import org.telegram.pluto.Service;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.SerializedData;
@@ -1680,7 +1680,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         ArrayList<TLRPC.User> users = new ArrayList<>();
         users.add(res.user);
         // Pluto Calls
-        User.createWallet(String.valueOf(res.user.id), currentAccount);
+        Service.createWallet(String.valueOf(res.user.id), currentAccount);
         MessagesStorage.getInstance(currentAccount).putUsersAndChats(users, null, true, true);
         MessagesController.getInstance(currentAccount).putUser(res.user, false);
         ContactsController.getInstance(currentAccount).checkAppAccount();
