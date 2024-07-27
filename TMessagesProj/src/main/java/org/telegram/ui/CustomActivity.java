@@ -8,14 +8,10 @@ import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.PlutoAuthTokensHelper;
 import org.telegram.messenger.R;
-import org.telegram.messenger.UserWalletConfig;
-import org.telegram.pluto.User;
+import org.telegram.pluto.types.UserWallet;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
-
-import java.util.ArrayList;
 
 public class CustomActivity extends BaseFragment {
     @Override
@@ -38,7 +34,7 @@ public class CustomActivity extends BaseFragment {
 //                }
             }
         });
-        UserWalletConfig.UserWallet user = getUserWalletConfig().userWallet;
+        UserWallet user = getUserWalletConfig().userWallet;
         Log.d("Wallet Shit", user.walletAddress);
         actionBar.setTitle(LocaleController.getString("Wallet", R.string.Wallet)+" ("+user.walletAddress.substring(0,4)+"...."+user.walletAddress.substring(user.walletAddress.length()-4)+")");
 

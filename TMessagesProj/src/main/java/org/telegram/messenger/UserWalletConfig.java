@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import com.google.android.exoplayer2.util.Log;
 import com.google.gson.Gson;
 
+import org.telegram.pluto.types.UserWallet;
+
 public class UserWalletConfig extends BaseController {
     static Gson gson =  new Gson();
     public final static int MAX_ACCOUNT_COUNT = 4;
@@ -13,14 +15,6 @@ public class UserWalletConfig extends BaseController {
 
     public UserWalletConfig(int num) {
         super(num);
-    }
-
-    public static class UserWallet {
-        public String walletAddress;
-
-        public UserWallet(String walletAddress) {
-            this.walletAddress = walletAddress;
-        }
     }
 
     public SharedPreferences getPreferences() {
