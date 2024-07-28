@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 
 import org.telegram.messenger.PlutoAuthTokensHelper;
 import org.telegram.messenger.UserWalletConfig;
-import org.telegram.pluto.RetrofitClient;
+import org.telegram.pluto.types.UserWallet;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -20,7 +20,6 @@ import retrofit2.Response;
 
 public class Service {
     private static PlutoAuthTokensHelper.Token token;
-    private static final ApiService apiService = RetrofitClient.getClient("http://192.168.68.201:3000").create(ApiService.class);
 
     static class CreateWalletRequestType {
         private String telegramId;
@@ -31,17 +30,19 @@ public class Service {
         private String accessToken;
     }
 
-    static class GetWalletResponseType extends org.telegram.pluto.types.UserWallet {}
+    static class GetWalletResponseType extends UserWallet {}
 
-    private interface ApiService {
+    private abstract static class ApiService {
         @POST("/wallets")
-        Call<CreateWalletResponseType> createWallet(@Body CreateWalletRequestType requestType);
+        abstract Call<CreateWalletResponseType> createWallet(@Body CreateWalletRequestType requestType);
 
         @GET("/wallets/me")
-        Call<GetWalletResponseType> getWallet(@Header("Authorization") String accessToken);
+        abstract Call<GetWalletResponseType> getWallet(@Header("Authorization") String accessToken);
     }
 
-    public static void createWallet(String telegramId,int currentAccount) {
+    private static final ApiService apiService = RetrofitClient.getClient("http://192.168.68.201:3000").create(ApiService.class);
+
+    public static void createWallet(String telegramId, int currentAccount) {
         CreateWalletRequestType req = new CreateWalletRequestType();
         req.telegramId = telegramId;
 
