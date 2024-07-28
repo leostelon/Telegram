@@ -1,5 +1,6 @@
 package org.telegram.messenger;
 
+import org.telegram.pluto.UserWalletConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.Components.Paint.PersistColorPalette;
 
@@ -51,6 +52,10 @@ public class BaseController {
 
     protected final UserConfig getUserConfig() {
         return parentAccountInstance.getUserConfig();
+    }
+
+    protected final UserWalletConfig getUserWalletConfig() {
+        return parentAccountInstance.getUserWalletConfig();
     }
 
     protected final MessagesStorage getMessagesStorage() {

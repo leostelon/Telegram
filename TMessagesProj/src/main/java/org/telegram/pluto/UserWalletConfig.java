@@ -1,4 +1,4 @@
-package org.telegram.messenger;
+package org.telegram.pluto;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -6,12 +6,19 @@ import android.content.SharedPreferences;
 import com.google.android.exoplayer2.util.Log;
 import com.google.gson.Gson;
 
+import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BaseController;
+import org.telegram.messenger.FileLog;
+import org.telegram.pluto.types.Token;
 import org.telegram.pluto.types.UserWallet;
 
 public class UserWalletConfig extends BaseController {
     static Gson gson =  new Gson();
     public final static int MAX_ACCOUNT_COUNT = 4;
+    public Token token;
     public UserWallet userWallet;
+
+    private static class User extends UserWallet {}
 
     public UserWalletConfig(int num) {
         super(num);
@@ -39,14 +46,30 @@ public class UserWalletConfig extends BaseController {
         return localInstance;
     }
 
+    public void loadConfig() {
+        SharedPreferences preferences = getPreferences();
+
+        String string = preferences.getString("userWallet", null);
+        if (string != null) {
+            userWallet = gson.fromJson(string, User.class);
+        }
+
+        string = preferences.getString("token", null);
+        if (string != null) {
+            token = gson.fromJson(string, Token.class);
+        }
+    }
+
     public void saveConfig(boolean newUser) {
         SharedPreferences.Editor editor = getPreferences().edit();
 
         try {
             if(newUser) {
-                String string = gson.toJson(userWallet);
-                editor.putString("userWallet", string);
+                String userWalletString = gson.toJson(userWallet);
+                editor.putString("userWallet", userWalletString);
             }
+            String tokenString = gson.toJson(token);
+            editor.putString("token", tokenString);
             editor.apply();
         } catch (Exception e) {
             FileLog.e(e);
@@ -56,5 +79,10 @@ public class UserWalletConfig extends BaseController {
     public void setUserWallet(UserWallet newUserWallet) {
         Log.d("New Wallet", newUserWallet.toString());
         userWallet = newUserWallet;
+    }
+
+    public void setToken(Token newToken) {
+        Log.d("New Wallet Token", newToken.accessToken);
+        token = newToken;
     }
 }

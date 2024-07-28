@@ -5,23 +5,14 @@ import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.exoplayer2.util.Log;
 import com.google.gson.Gson;
+
+import org.telegram.pluto.types.Token;
 
 import java.util.ArrayList;
 
 public class PlutoAuthTokensHelper {
     static Gson gson =  new Gson();
-
-    public static class Token {
-        public final String refreshToken;
-        public final String accessToken;
-
-        public Token(String refreshToken, String accessToken) {
-            this.accessToken = accessToken;
-            this.refreshToken = refreshToken;
-        }
-    }
 
     public static ArrayList<Token> getSavedLogInTokens() {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("saved_pluto_tokens", Context.MODE_PRIVATE);

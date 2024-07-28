@@ -6,7 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.telegram.messenger.PlutoAuthTokensHelper;
-import org.telegram.messenger.UserWalletConfig;
+import org.telegram.messenger.UserConfig;
+import org.telegram.pluto.types.Token;
 import org.telegram.pluto.types.UserWallet;
 
 import retrofit2.Call;
@@ -19,28 +20,26 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Service {
-    private static PlutoAuthTokensHelper.Token token;
+    private static Token token;
+    private static final int currentAccount = UserConfig.selectedAccount;
 
     static class CreateWalletRequestType {
         private String telegramId;
     }
 
-    static class CreateWalletResponseType {
-        private String refreshToken;
-        private String accessToken;
-    }
+    static class CreateWalletResponseType extends Token {}
 
     static class GetWalletResponseType extends UserWallet {}
 
-    private abstract static class ApiService {
+    private interface ApiService {
         @POST("/wallets")
-        abstract Call<CreateWalletResponseType> createWallet(@Body CreateWalletRequestType requestType);
+        Call<CreateWalletResponseType> createWallet(@Body CreateWalletRequestType requestType);
 
         @GET("/wallets/me")
-        abstract Call<GetWalletResponseType> getWallet(@Header("Authorization") String accessToken);
+        Call<GetWalletResponseType> getWallet(@Header("Authorization") String accessToken);
     }
 
-    private static final ApiService apiService = RetrofitClient.getClient("http://192.168.68.201:3000").create(ApiService.class);
+    private static final ApiService apiService = RetrofitClient.getPlutoClient().create(ApiService.class);
 
     public static void createWallet(String telegramId, int currentAccount) {
         CreateWalletRequestType req = new CreateWalletRequestType();
@@ -54,9 +53,10 @@ public class Service {
                 if(response.isSuccessful()) {
                     CreateWalletResponseType res = response.body();
                     if(res != null) {
-                        token = new PlutoAuthTokensHelper.Token(res.refreshToken, res.accessToken);
-                        PlutoAuthTokensHelper.saveLogInToken(token);
-                        Log.d("Wallet Response", res.toString());
+                        PlutoAuthTokensHelper.saveLogInToken(res);
+                        Log.d("Wallet Response", res.accessToken);
+                        UserWalletConfig.getInstance(currentAccount).setToken(res);
+                        UserWalletConfig.getInstance(currentAccount).saveConfig(false);
                         getWallet(res.accessToken, currentAccount);
                     };
                 } else {
@@ -80,9 +80,9 @@ public class Service {
                 if(response.isSuccessful()) {
                     GetWalletResponseType res = response.body();
                     if(res != null) {
-                        Log.d("My Wallet", res.toString());
-//                        UserWallet userWallet = (UserWallet) res;
+                        Log.d("My Wallet", res.walletAddress);
                         UserWalletConfig.getInstance(currentAccount).setUserWallet(res);
+                        UserWalletConfig.getInstance(currentAccount).saveConfig(true);
                     };
                 } else {
                     Log.d("My Wallet Failed", String.valueOf(response.code()));
